@@ -261,8 +261,18 @@ module.exports = function (context) {
 
             if (!podified) {
                 console.log('Adding schemes');
-                fs.mkdirSync(sharedDataDir);
-                fs.mkdirSync(schemesTargetDir);
+                try {
+                    fs.mkdirSync(sharedDataDir);
+                } catch (e) {
+                    //if the directory already exists, that's okay
+                    if (e.code !== 'EEXIST') throw e;
+                }
+                try {
+                    fs.mkdirSync(sharedDataDir);
+                } catch (e) {
+                    //if the directory already exists, that's okay
+                    if (e.code !== 'EEXIST') throw e;
+                }
                 copyTpl(schemesSrcDir + '/CordovaLib.xcscheme', schemesTargetDir + '/CordovaLib.xcscheme', {
                     appName: appName
                 });
